@@ -155,7 +155,9 @@ class HomeViewModel extends GetxController
 
   Result insertinAB(AlbumModel A) {
     final Result temp = Result();
-    temp.fieldList = FieldList(thumbSmall: A.thumbSmall.toString());
+    temp.fieldList = FieldList(
+        thumbSmall: A.thumbSmall.toString(),
+        identifier: A.identifiant.toString());
     temp.resource = Resource(ttl: A.ttl.toString(), id: A.Id.toString());
 
     return temp;

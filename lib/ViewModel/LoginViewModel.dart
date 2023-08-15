@@ -20,6 +20,7 @@ import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
+import '../Model/tokendec.dart';
 
 class LoginViewModel extends GetxController {
   final getStorge = GetStorage();
@@ -115,27 +116,33 @@ class LoginViewModel extends GetxController {
 
       final url =
           Uri.https('payment.eklectic.tn', '/API/oauth/user/authorize', {
-        'response_type': 'code',
+        'response_type': 'code id_token',
         'client_id': "34755f23-cd61-11ed-9577-fa163e3dd8b3",
         'redirect_uri': '$callbackUrlScheme:/',
         'scope': 'openid phone CMAM',
       });
-
+//https://payment.eklectic.tn/API/oauth/user/authorize?response_type=code&client_id=34755f23-cd61-11ed-9577-fa163e3dd8b3&scope=openid+phone+CMAM&redirect_uri=com.example.musika1
       // Launch the authorization flow in a browser or WebView
       final result = await FlutterWebAuth.authenticate(
         url: url.toString(),
         callbackUrlScheme: callbackUrlScheme,
       );
-
+      print(result);
+      final test = Uri.parse(result).queryParameters['offre_id'];
+      final idtoken = Uri.parse(result).queryParameters['id_token'];
+      final token = Uri.parse(result).queryParameters['code'];
       // Extract the authorization code from the result
-      final authorizationCode = Uri.parse(result).queryParameters['code'];
+      // print(parseJwtHeader(idtoken));
 
-      // Return to the app by opening the callback URL
-      if (await canLaunch(callbackUrl.toString())) {
-        await launch(callbackUrl.toString());
-      } else {
-        print('Failed to launch app');
-        // Show an error message or take appropriate action
+      if (idtoken != null) {
+        final jsonData = parseJwtPayLoad(idtoken);
+        print(jsonData);
+
+        if (jsonData != null) {
+          final msisdn = jsonData['msisdn'].toString();
+          getStorge.write("name", msisdn);
+          Get.offAllNamed(Routes.Master);
+        }
       }
     } on PlatformException catch (e) {
       if (e.code == 'CANCELED') {

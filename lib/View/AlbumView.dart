@@ -185,22 +185,15 @@ class AlbumView extends GetView<AlbumViewModel> {
                                                             0) {
                                                           c1.isShuffled.value =
                                                               false;
-                                                          c1.isRepated.value =
-                                                              false;
-                                                          var index = 0;
                                                           if (controller
                                                                   .IsShuffledF
                                                                   .value ==
                                                               false) {
+                                                            var index = 0;
                                                             controller
                                                                 .IsShuffledF
                                                                 .value = true;
 
-                                                            controller
-                                                                .IsShuffledF
-                                                                .value = true;
-                                                            c.Miniplayer.value =
-                                                                true;
                                                             if (c.Miniplayer
                                                                     .value ==
                                                                 false) {
@@ -211,14 +204,15 @@ class AlbumView extends GetView<AlbumViewModel> {
                                                                 builder: (context) =>
                                                                     PlaySongView(
                                                                         index,
-                                                                        _Titrehot!),
+                                                                        _Titrehot),
                                                               ));
 
                                                               Get.find<
                                                                       PlayViewModel>()
                                                                   .playSongg(
-                                                                      _Titrehot!,
+                                                                      _Titrehot,
                                                                       index);
+
                                                               Get.find<
                                                                       PlayViewModel>()
                                                                   .Play(_Titrehot[
@@ -236,7 +230,7 @@ class AlbumView extends GetView<AlbumViewModel> {
                                                               Get.find<
                                                                       PlayViewModel>()
                                                                   .playSongg(
-                                                                      _Titrehot!,
+                                                                      _Titrehot,
                                                                       index);
                                                               Get.find<
                                                                       PlayViewModel>()
@@ -695,13 +689,12 @@ class AlbumView extends GetView<AlbumViewModel> {
                                                 builder: (context) =>
                                                     PlaySongView(index, _Sugg),
                                               ));
-
+                                              c1.playSongg(_Sugg, index);
                                               c1.Play(_Sugg[index]
                                                   .primaryDocs!
                                                   .link
                                                   .toString()
                                                   .replaceAll('https', 'http'));
-                                              c1.playSongg(_Sugg, index);
                                             } else {
                                               c1.Stop();
                                               c1.playSongg(_Sugg, index);

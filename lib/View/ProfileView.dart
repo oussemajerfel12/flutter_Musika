@@ -230,7 +230,7 @@ class ProfileView extends GetView<ProfilViewModel> {
                     ],
                   ),
                 ),*/
-
+/*
                 Container(
                     height: MediaQuery.of(context).size.height * 0.2 / 3,
                     width: MediaQuery.of(context).size.width,
@@ -272,9 +272,9 @@ class ProfileView extends GetView<ProfilViewModel> {
                       ],
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
+                ),*/
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.3 / 3,
                 ),
                 Container(
                   height: 50,

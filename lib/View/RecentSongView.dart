@@ -154,12 +154,12 @@ class RecentSongView extends GetView<HomeViewModel> {
                                         builder: (context) =>
                                             PlaySongView(index, recently),
                                       ));
+                                      c1.playSongg(recently, index);
 
                                       c1.Play(_TitreList[index]
                                           .Lien
                                           .toString()
                                           .replaceAll('https', 'http'));
-                                      c1.playSongg(recently, index);
                                     } else {
                                       c1.Stop();
                                       c1.playSongg(recently, index);

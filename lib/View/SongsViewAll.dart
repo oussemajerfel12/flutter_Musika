@@ -156,13 +156,12 @@ class SongsViewAll extends GetView<HomeViewModel> {
                                                     PlaySongView(
                                                         index, _TitreLoad),
                                               ));
-
+                                              c1.playSongg(_TitreLoad, index);
                                               c1.Play(_TitreLoad[index]
                                                   .primaryDocs!
                                                   .link
                                                   .toString()
                                                   .replaceAll('https', 'http'));
-                                              c1.playSongg(_TitreLoad, index);
                                             } else {
                                               c1.Stop();
                                               c1.playSongg(_TitreLoad, index);

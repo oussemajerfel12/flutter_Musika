@@ -378,6 +378,7 @@ class libraryViewModel extends GetxController {
         thumbSmall: maps[i]['thumbSmall'] as String,
         ttl: maps[i]['ttl'] as String,
         Id: maps[i]['Id'] as String,
+        identifiant: maps[i]['identifiant'] as String,
       );
     });
   }

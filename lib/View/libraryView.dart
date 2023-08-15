@@ -203,14 +203,13 @@ class libraryView extends GetView<libraryViewModel> {
                                                         PlaySongView(
                                                             index, album3),
                                                   ));
-
+                                                  c1.playSongg(album3, index);
                                                   c1.Play(album3[index]
                                                       .primaryDocs!
                                                       .link
                                                       .toString()
                                                       .replaceAll(
                                                           'https', 'http'));
-                                                  c1.playSongg(album3, index);
                                                 } else {
                                                   c1.Stop();
                                                   c1.playSongg(album3, index);

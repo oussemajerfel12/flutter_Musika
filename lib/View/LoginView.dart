@@ -21,7 +21,7 @@ class LoginView extends GetView<LoginViewModel> {
       resizeToAvoidBottomInset: false,
       body: Container(
         decoration: BoxDecoration(gradient: MyGradient.getGradient()),
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(18.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -38,7 +38,7 @@ class LoginView extends GetView<LoginViewModel> {
             const SizedBox(
               height: 40,
             ),
-            TextFormField(
+            /*  TextFormField(
                 obscureText: false,
                 controller: emailController,
                 style: TextStyle(color: Colors.white, fontSize: 20),
@@ -53,11 +53,11 @@ class LoginView extends GetView<LoginViewModel> {
                     color: Color.fromARGB(255, 249, 248, 251),
                     fontSize: 20, //<-- SEE HERE
                   ),
-                )),
-            const SizedBox(
+                )),*/
+            /*const SizedBox(
               height: 40,
             ),
-            TextFormField(
+             TextFormField(
                 obscureText: true,
                 controller: passwordController,
                 style: TextStyle(color: Colors.white, fontSize: 20),
@@ -72,10 +72,11 @@ class LoginView extends GetView<LoginViewModel> {
                     color: Color.fromARGB(255, 249, 248, 251),
                     fontSize: 20, //<-- SEE HERE
                   ),
-                )),
+                )),*/ /*
             const SizedBox(
               height: 40,
             ),
+            
             GestureDetector(
               onTap: () {
                 controller.login(emailController.text.toString(),
@@ -96,7 +97,10 @@ class LoginView extends GetView<LoginViewModel> {
                 ),
               ),
             ),
-            /*  GestureDetector(
+            const SizedBox(
+              height: 20,
+            ),*/
+            GestureDetector(
               onTap: () {
                 controller.loginSSO();
               },
@@ -107,18 +111,18 @@ class LoginView extends GetView<LoginViewModel> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10)),
                 child: const Center(
-                  child: Text('SSO',
+                  child: Text('CONNECT',
                       style: TextStyle(
                           color: Color.fromARGB(214, 7, 6, 26),
                           fontSize: 20,
                           fontWeight: FontWeight.bold)),
                 ),
               ),
-            ),*/
-            const SizedBox(
-              height: 20,
             ),
-            const Divider(color: Colors.white, thickness: 2),
+            const SizedBox(
+              height: 80,
+            ),
+            /*  const Divider(color: Colors.white, thickness: 2),
             const SizedBox(
               height: 0,
             ),
@@ -139,7 +143,7 @@ class LoginView extends GetView<LoginViewModel> {
                     launch(
                         'https://integ03-cmam.archimed.fr/MUSIKA/'); // Replace with the desired URL
                   })
-            ]),
+            ]), /*
             TextButton(
                 child: const Text(
                   'FORGOT YOUR PASSWORD?',
@@ -147,7 +151,7 @@ class LoginView extends GetView<LoginViewModel> {
                 ),
                 onPressed: () {
                   launch('https://integ03-cmam.archimed.fr/MUSIKA/');
-                })
+                })*/*/
           ],
         ),
       ),
