@@ -25,7 +25,7 @@ class libraryViewModel extends GetxController {
         '{"query":{"ResultSize":10,"Page":0,"SearchInput":"","LabelFilter":[]}}';
 
     Uri linkLogin = Uri(
-      scheme: 'https',
+      scheme: 'http',
       host: 'integ03-cmam.archimed.fr',
       path: 'MUSIKA/Portal/Recherche/search.svc/SearchUserBasket',
     );

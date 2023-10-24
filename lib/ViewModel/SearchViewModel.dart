@@ -33,7 +33,7 @@ class SearchViewModel extends GetxController {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://integ03-cmam.archimed.fr/MUSIKA/Portal/Recherche/Search.svc/Search'),
+            'http://197.10.242.135/MUSIKA/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );
@@ -128,7 +128,7 @@ class SearchViewModel extends GetxController {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://integ03-cmam.archimed.fr/MUSIKA/Portal/Recherche/Search.svc/Search'),
+            'http://197.10.242.135/MUSIKA/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );

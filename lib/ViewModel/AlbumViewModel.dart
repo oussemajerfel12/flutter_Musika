@@ -59,7 +59,7 @@ class AlbumViewModel extends GetxController {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://integ03-cmam.archimed.fr/MUSIKA/Portal/Recherche/Search.svc/Search'),
+            'http://197.10.242.135/PNT/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );
@@ -142,7 +142,7 @@ class AlbumViewModel extends GetxController {
 
   Future<List<Result>?> album_Artist(String value) async {
     String body = '{"query":{{"FacetFilter" :"{\\"'
-        '_64\\"'
+        '_65\\"'
         ':\\"'
         'Album\\"'
         '}","ForceSearch":true,"InitialSearch":false,"InjectFields":true,"Page":0,"PageRange":3,"QueryString":"$value","ResultSize":10,"ScenarioCode":"CATALOGUE","ScenarioDisplayMode":"display-vignet","SearchGridFieldsShownOnResultsDTO":[],"SearchLabel":"","SearchTerms":"التونسية لويزة","SortField":null,"SortOrder":0}}';
@@ -150,7 +150,7 @@ class AlbumViewModel extends GetxController {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://integ03-cmam.archimed.fr/MUSIKA/Portal/Recherche/Search.svc/Search'),
+            'http://197.10.242.135/PNT/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );
@@ -206,15 +206,14 @@ class AlbumViewModel extends GetxController {
   Future<List<Result>?> album_Sugg(String value) async {
     String body =
         '{ "query": {"Id": "0","Index": 10,"NBResults": 70,"PageRange": 3,"InjectFields":true,"SearchQuery": {"CloudTerms": [],"FacetFilter" :"{\\"'
-        '_64\\"'
+        '_65\\"'
         ':\\"'
         'Album\\"'
         '}","ForceSearch":true,"InitialSearch": false,"Page": 0,"PageRange": 3,"QueryString":"$value","ResultSize": 10,"ScenarioCode": "CATALOGUE","SearchTerms":""}}}';
 
     try {
       final response = await http.post(
-        Uri.parse(
-            'https://integ03-cmam.archimed.fr/MUSIKA/Portal/Recherche/Search.svc/GetRecord'),
+        Uri.parse('http://197.10.242.135/PNT/Search.svc/GetRecord'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );
@@ -320,7 +319,7 @@ class AlbumViewModel extends GetxController {
   Future<List<Result>?> Artiste_Album(String value) async {
     print(value);
     String body = '{"query":{"FacetFilter" :"{\\"'
-        '_64\\"'
+        '_65\\"'
         ':\\"'
         'Album\\"'
         '}","ForceSearch":true,"InitialSearch":true,"InjectFields":true,"Page":0,"PageRange":3,"QueryString": "$value","ResultSize":10,"ScenarioCode":"CATALOGUE","ScenarioDisplayMode":"display-vignet","SearchGridFieldsShownOnResultsDTO":[],"SearchTerms":"$value","SearchLabel":"","SortField":null,"SortOrder":0}}';
@@ -328,7 +327,7 @@ class AlbumViewModel extends GetxController {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://integ03-cmam.archimed.fr/MUSIKA/Portal/Recherche/Search.svc/Search'),
+            'http://197.10.242.135/PNT/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );

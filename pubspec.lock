@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
+  asn1lib:
+    dependency: transitive
+    description:
+      name: asn1lib
+      sha256: "21afe4333076c02877d14f4a89df111e658a6d466cbfc802eb705eb91bd5adfd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
   assets_audio_player:
     dependency: "direct main"
     description:
@@ -61,18 +69,18 @@ packages:
     dependency: "direct main"
     description:
       name: audio_service
-      sha256: "7e86d7ce23caad605199f7b25e548fe7b618fb0c150fa0585f47a910fe7e7a67"
+      sha256: a4d989f1225ea9621898d60f23236dcbfc04876fa316086c23c5c4af075dbac4
       url: "https://pub.dev"
     source: hosted
-    version: "0.18.9"
+    version: "0.18.12"
   audio_service_platform_interface:
     dependency: transitive
     description:
       name: audio_service_platform_interface
-      sha256: "2c3a1d52803931e836b9693547a71c0c3585ad54219d2214219ed5cfcc3c1af4"
+      sha256: "8431a455dac9916cc9ee6f7da5620a666436345c906ad2ebb7fa41d18b3c1bf4"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
   audio_service_web:
     dependency: transitive
     description:
@@ -85,10 +93,10 @@ packages:
     dependency: transitive
     description:
       name: audio_session
-      sha256: "97317505460ab705e8e186e87a3924d67c74d8c8a07cbc087e3b988bbce7cfaa"
+      sha256: "8a2bc5e30520e18f3fb0e366793d78057fb64cd5287862c76af0c8771f2a52ad"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.14"
+    version: "0.1.16"
   audioplayers:
     dependency: "direct dev"
     description:
@@ -258,6 +266,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  crypto_keys:
+    dependency: transitive
+    description:
+      name: crypto_keys
+      sha256: acc19abf34623d990a0e8aec69463d74a824c31f137128f42e2810befc509ad0
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0+1"
   csslib:
     dependency: transitive
     description:
@@ -359,6 +375,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
+  flutter_inappwebview:
+    dependency: "direct main"
+    description:
+      name: flutter_inappwebview
+      sha256: d198297060d116b94048301ee6749cd2e7d03c1f2689783f52d210a6b7aba350
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.8.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -566,6 +590,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  jose:
+    dependency: transitive
+    description:
+      name: jose
+      sha256: "7955ec5d131960104e81fbf151abacb9d835c16c9e793ed394b2809f28b2198d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.4"
   js:
     dependency: transitive
     description:
@@ -686,6 +718,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  openid_client:
+    dependency: "direct main"
+    description:
+      name: openid_client
+      sha256: "514c0ba645b81029c28999831a70cb055dda1a3bc60be759a04d2556f60ec960"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.7"
   package_config:
     dependency: transitive
     description:
@@ -1251,6 +1291,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
+  webview_flutter:
+    dependency: "direct main"
+    description:
+      name: webview_flutter
+      sha256: c1ab9b81090705c6069197d9fdc1625e587b52b8d70cdde2339d177ad0dbb98e
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.4.1"
+  webview_flutter_android:
+    dependency: transitive
+    description:
+      name: webview_flutter_android
+      sha256: b0cd33dd7d3dd8e5f664e11a19e17ba12c352647269921a3b568406b001f1dff
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.12.0"
+  webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: webview_flutter_platform_interface
+      sha256: "6d9213c65f1060116757a7c473247c60f3f7f332cac33dc417c9e362a9a13e4f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.0"
+  webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: webview_flutter_wkwebview
+      sha256: "30b9af6bdd457b44c08748b9190d23208b5165357cc2eb57914fee1366c42974"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.9.1"
   win32:
     dependency: transitive
     description:
@@ -1259,6 +1331,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.4"
+  x509:
+    dependency: transitive
+    description:
+      name: x509
+      sha256: "6db77b0baecf54584f886607247e9dedd9fd63f1e2d0ee0a00b5bb353fd7885f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.3"
   xdg_directories:
     dependency: transitive
     description:
@@ -1285,4 +1365,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.0.0 <4.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.7.0"

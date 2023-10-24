@@ -94,7 +94,7 @@ class HomeViewModel extends GetxController
     try {
       final response = await http.post(
         Uri.parse(
-            'https://integ03-cmam.archimed.fr/PNT/Portal/Recherche/search.svc/Search'),
+            'http://197.10.242.135/MUSIKA/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );
@@ -173,7 +173,7 @@ class HomeViewModel extends GetxController
 
   Future<List<Result>?> loadHot() async {
     String body = '{"query":{"FacetFilter" :"{\\"'
-        '_74\\"'
+        '_75\\"'
         ':\\"'
         'Nouveauté\\"'
         '}","ForceSearch":true,"InitialSearch":false,"Page":0,"PageRange":3,"QueryString":"*","ResultSize":-1,"ScenarioCode":"CATALOGUE","ScenarioDisplayMode":"","SearchContext":0,"SearchTerms":"","SortField":null,"InjectFields":true,"SearchLabel":""}}';
@@ -181,7 +181,7 @@ class HomeViewModel extends GetxController
     try {
       final response = await http.post(
         Uri.parse(
-            'https://integ03-cmam.archimed.fr/PNT/Portal/Recherche/search.svc/Search'),
+            'http://197.10.242.135/MUSIKA/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );
@@ -283,11 +283,11 @@ class HomeViewModel extends GetxController
     SearchOptionsDetails option = SearchOptionsDetails(
       InjectFields: true,
       ScenarioCode: "CATALOGUE",
-      ResultSize: 25,
+      ResultSize: 10,
       Page: page,
       SortField: "",
       QueryString: "*:*",
-      FacetFilter: "{\"_64\":\"Titre\"}",
+      FacetFilter: "{\"_65\":\"Titre\"}",
     );
 
     SearchOptions options = SearchOptions(haveQuery: "True", query: option);
@@ -295,7 +295,7 @@ class HomeViewModel extends GetxController
     try {
       final response = await http.post(
         Uri.parse(
-            'https://integ03-cmam.archimed.fr/PNT/Portal/Recherche/search.svc/Search'),
+            'http://197.10.242.135/MUSIKA/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(options),
       );
@@ -383,7 +383,7 @@ class HomeViewModel extends GetxController
     try {
       final response = await http.post(
         Uri.parse(
-            'https://integ03-cmam.archimed.fr/PNT/Portal/Recherche/search.svc/Search'),
+            'http://197.10.242.135/MUSIKA/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );
@@ -444,7 +444,7 @@ class HomeViewModel extends GetxController
       Page: page,
       SortField: "DateStart_sort",
       QueryString: "*:*",
-      FacetFilter: "{\"_64\":\"Titre\"}",
+      FacetFilter: "{\"_65\":\"Titre\"}",
       InjectFields: true,
     );
 //jsonEncode(options)
@@ -453,7 +453,7 @@ class HomeViewModel extends GetxController
     try {
       final response = await http.post(
           Uri.parse(
-              'https://integ03-cmam.archimed.fr/PNT/Portal/Recherche/search.svc/Search'),
+              'http://197.10.242.135/MUSIKA/Portal/Recherche/Search.svc/Search'),
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(options));
 
@@ -571,7 +571,7 @@ class HomeViewModel extends GetxController
 
       final response = await http.post(
           Uri.parse(
-              'https://integ03-cmam.archimed.fr/PNT/Portal/Recherche/search.svc/Search'),
+              'http://197.10.242.135/PNT/Portal/Recherche/Search.svc/Search'),
           headers: {"Content-Type": "application/json"},
           body: body);
 

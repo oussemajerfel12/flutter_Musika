@@ -52,6 +52,15 @@ android {
         multiDexEnabled true
  
     }
+
+     signingConfigs {
+        release {
+            storeFile file('../ma_nouvelle_clé.jks')
+            storePassword 'Archimed'
+            keyAlias 'ma_cle'
+            keyPassword 'Archimed'
+        }
+    }
     
 
     buildTypes {

@@ -38,6 +38,7 @@ class LoginView extends GetView<LoginViewModel> {
             const SizedBox(
               height: 40,
             ),
+
             /*  TextFormField(
                 obscureText: false,
                 controller: emailController,
@@ -101,8 +102,8 @@ class LoginView extends GetView<LoginViewModel> {
               height: 20,
             ),*/
             GestureDetector(
-              onTap: () {
-                controller.loginSSO();
+              onTap: () async {
+                await controller.loginSSO(context);
               },
               child: Container(
                 height: 50,

@@ -7,6 +7,7 @@ Map<String, dynamic> parseJwtPayLoad(String token) {
   }
 
   final payload = _decodeBase64(parts[1]);
+
   final payloadMap = json.decode(payload);
   if (payloadMap is! Map<String, dynamic>) {
     throw Exception('invalid payload');
@@ -22,6 +23,21 @@ Map<String, dynamic> parseJwtHeader(String token) {
   }
 
   final payload = _decodeBase64(parts[0]);
+  final payloadMap = json.decode(payload);
+  if (payloadMap is! Map<String, dynamic>) {
+    throw Exception('invalid payload');
+  }
+
+  return payloadMap;
+}
+
+Map<String, dynamic> parseJwtHeader1(String token) {
+  final parts = token.split('.');
+  if (parts.length != 3) {
+    throw Exception('invalid token');
+  }
+
+  final payload = _decodeBase64(parts[2]);
   final payloadMap = json.decode(payload);
   if (payloadMap is! Map<String, dynamic>) {
     throw Exception('invalid payload');
