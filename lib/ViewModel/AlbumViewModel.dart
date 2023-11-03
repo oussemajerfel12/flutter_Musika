@@ -59,7 +59,7 @@ class AlbumViewModel extends GetxController {
     try {
       final response = await http.post(
         Uri.parse(
-            'http://197.10.242.135/PNT/Portal/Recherche/Search.svc/Search'),
+            'http://197.10.242.135/MUSIKA/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );
@@ -150,7 +150,7 @@ class AlbumViewModel extends GetxController {
     try {
       final response = await http.post(
         Uri.parse(
-            'http://197.10.242.135/PNT/Portal/Recherche/Search.svc/Search'),
+            'http://197.10.242.135/MUSIKA/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );
@@ -213,7 +213,7 @@ class AlbumViewModel extends GetxController {
 
     try {
       final response = await http.post(
-        Uri.parse('http://197.10.242.135/PNT/Search.svc/GetRecord'),
+        Uri.parse('http://197.10.242.135/MUSIKA/Search.svc/GetRecord'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );
@@ -327,7 +327,7 @@ class AlbumViewModel extends GetxController {
     try {
       final response = await http.post(
         Uri.parse(
-            'http://197.10.242.135/PNT/Portal/Recherche/Search.svc/Search'),
+            'http://197.10.242.135/MUSIKA/Portal/Recherche/Search.svc/Search'),
         headers: {"Content-Type": "application/json"},
         body: body,
       );

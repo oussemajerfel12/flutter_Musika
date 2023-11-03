@@ -143,10 +143,45 @@ class HomeViewModel extends GetxController
     return [];
   }
 
+  Future<List<Result>?> getTrend() async {
+    final response =
+        await http.get(Uri.parse('http://197.10.242.135:3000/get-trend'));
+    List<Result> rslt1 = <Result>[];
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      for (dynamic i in data) {
+        Result result = new Result();
+        Resource res =
+            Resource(); // Use "res" instead of "Res" for variable names
+        FieldList fi = FieldList();
+        PrimaryDoc pr = PrimaryDoc();
+
+        fi.thumbSmall = i["Cover_Image"];
+
+        result.fieldList = fi;
+        String str = i["id"].toString();
+        res.rscUid = int.parse(str);
+        res.crtr = i["Titre"];
+        res.id = i["Artiste"];
+        res.type = "Titre"; // You can include this if it's needed
+        result.resource = res;
+        pr.link = i["lien"];
+        result.primaryDocs = pr;
+        rslt1.add(result);
+      }
+      return rslt1;
+    } else {
+      throw Exception('Failed to load view count');
+    }
+  }
+
   Result insertin(SongModel s) {
     final Result temp = Result();
     temp.fieldList = FieldList(thumbSmall: s.ThumbSmall.toString());
-    temp.resource = Resource(crtr: s.Crtr.toString(), id: s.Id.toString());
+    temp.resource = Resource(
+        crtr: s.Crtr.toString(),
+        id: s.Id.toString(),
+        rscUid: int.parse(s.RscUid.toString()));
 
     temp.primaryDocs = PrimaryDoc(link: s.Lien.toString());
 
@@ -571,7 +606,7 @@ class HomeViewModel extends GetxController
 
       final response = await http.post(
           Uri.parse(
-              'http://197.10.242.135/PNT/Portal/Recherche/Search.svc/Search'),
+              'http://197.10.242.135/MUSIKA/Portal/Recherche/Search.svc/Search'),
           headers: {"Content-Type": "application/json"},
           body: body);
 

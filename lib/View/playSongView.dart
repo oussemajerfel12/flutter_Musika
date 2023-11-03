@@ -20,6 +20,7 @@ import '../consts/loading.dart';
 import '../Provider/dbprovider.dart';
 
 import '../consts/theme_data.dart';
+import '../Provider/SqlServerApi.dart';
 
 class PlaySongView extends GetView<PlayViewModel> {
   int index;
@@ -90,13 +91,25 @@ class PlaySongView extends GetView<PlayViewModel> {
     // RxBool isFavorite = false.obs;
     //final isFavorite = isFavoriteValue.obs;
 
+    DateTime now = DateTime.now();
+    int id = int.parse(item.RscUid.toString());
     final box = GetStorage();
+
     return Obx(() {
       return FutureBuilder(
           future: Future.wait([
             MemoDbProvider().findFavMusic(
                 list[controller.index.value].resource!.rscUid.toString()),
-            MemoDbProvider().addItemRecent(item)
+            MemoDbProvider().addItemRecent(item),
+            controller.getNumberOfViews(
+                list[controller.index.value].resource!.rscUid.toString()),
+            controller.checkIfLikeExists(
+                list[controller.index.value].resource!.rscUid.toString(),
+                controller.User_Id),
+            controller.checkIfExists(
+                list[controller.index.value].resource!.rscUid.toString()),
+            controller.getNumberOfLikes(
+                list[controller.index.value].resource!.rscUid.toString()),
           ]),
           builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
             if (!snapshot.hasData) {
@@ -105,6 +118,11 @@ class PlaySongView extends GetView<PlayViewModel> {
               );
             }
             int songf = snapshot.data![0];
+
+            String? vues = snapshot.data![2];
+            controller.IsLiked.value = snapshot.data![3];
+            controller.Trendy.value = snapshot.data![4];
+            controller.likes = snapshot.data![5];
 
             if (songf == 0) {
               controller.IsFavoriteS.value = false;
@@ -161,10 +179,49 @@ class PlaySongView extends GetView<PlayViewModel> {
                       children: [
                         // ignore: prefer_const_constructors
                         SizedBox(
-                          height: 10,
+                          height: MediaQuery.of(context).size.height * 0.1 / 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Container(
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(10, 0, 8, 8),
+                                alignment: Alignment.centerLeft,
+                                child: Image.asset(
+                                  'lib/Resources/drawable/eye-solid.png', // Replace with the actual path to your local image asset
+                                  width:
+                                      20, // Adjust width and height as needed
+                                  height: 20,
+                                  fit: BoxFit.cover,
+                                  color: Colors.white, // Adjust fit as needed
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(5, 0, 8, 8),
+                              child: Text(
+                                vues.toString(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 18,
+                                  height: 1.5,
+                                  fontFamily: 'Poppins',
+                                  letterSpacing: 0,
+                                  // Additional text style properties...
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.15 / 10,
                         ),
                         CircleAvatar(
-                            radius: 150,
+                            radius: 145,
                             backgroundColor: Color.fromRGBO(255, 255, 255, 0.57)
                                 .withOpacity(0.20),
                             backgroundImage: NetworkImage(
@@ -173,7 +230,7 @@ class PlaySongView extends GetView<PlayViewModel> {
                                   .toString(),
                             )),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.15 / 3,
+                          height: MediaQuery.of(context).size.height * 0.15 / 5,
                         ),
                         Text(
                           controller.index.value == index
@@ -209,9 +266,6 @@ class PlaySongView extends GetView<PlayViewModel> {
                             // Additional text style properties...
                           ),
                         ),
-                        SizedBox(
-                          height: 5,
-                        ),
 
                         Wrap(children: [
                           GetBuilder<PlayViewModel>(
@@ -221,6 +275,46 @@ class PlaySongView extends GetView<PlayViewModel> {
                                 Obx(() {
                                   final position = controller.position;
                                   final duration = controller.duration;
+
+                                  if ((position.inMilliseconds.round() >=
+                                          20000) &&
+                                      (controller.enter == 0)) {
+                                    controller.insertData(
+                                        controller.list1[controller.index.value]
+                                            .resource!.id
+                                            .toString(),
+                                        controller.list1[controller.index.value]
+                                            .resource!.rscUid
+                                            .toString(),
+                                        now.toString());
+                                    if (controller.Trendy.value == false) {
+                                      controller.insertData1(
+                                          controller
+                                              .list1[controller.index.value]
+                                              .resource!
+                                              .rscUid
+                                              .toString(),
+                                          controller
+                                              .list1[controller.index.value]
+                                              .resource!
+                                              .crtr
+                                              .toString(),
+                                          controller
+                                              .list1[controller.index.value]
+                                              .fieldList!
+                                              .thumbSmall
+                                              .toString(),
+                                          list[controller.index.value]
+                                              .primaryDocs!
+                                              .link
+                                              .toString());
+                                    }
+
+                                    controller.enter.value = 1;
+                                  }
+                                  if (position.inMilliseconds.round() == 0) {
+                                    controller.enter.value = 0;
+                                  }
                                   return SliderTheme(
                                     data: SliderThemeData(
                                       thumbShape: RoundSliderThumbShape(
@@ -277,8 +371,9 @@ class PlaySongView extends GetView<PlayViewModel> {
                             ),
                           ),
                           SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.3 / 3),
+                              height: MediaQuery.of(context).size.width *
+                                  0.3 /
+                                  1.75),
                           Container(
                             padding: EdgeInsets.fromLTRB(40, 0, 8, 8),
                             width: MediaQuery.of(context).size.width,
@@ -344,6 +439,7 @@ class PlaySongView extends GetView<PlayViewModel> {
                                               .primaryColorLight,
                                         ),
                                         onPressed: () async {
+                                          controller.enter.value = 0;
                                           controller.playPreviousSong();
                                         },
                                       ),
@@ -404,6 +500,7 @@ class PlaySongView extends GetView<PlayViewModel> {
                                               .primaryColorLight,
                                         ),
                                         onPressed: () async {
+                                          controller.enter.value = 0;
                                           controller.playNextSong();
                                         },
                                       ),
@@ -459,95 +556,154 @@ class PlaySongView extends GetView<PlayViewModel> {
                             ),
                           ),
                           Container(
-                            child: GetBuilder<PlayViewModel>(
-                              builder: (controller) => Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Container(
-                                      child: GestureDetector(
-                                        onTap: () {},
-                                        child: AnimatedSwitcher(
-                                          duration: Duration(milliseconds: 3),
-                                          switchInCurve: Curves.easeIn,
-                                          switchOutCurve: Curves.easeOut,
-                                          child: Visibility(
-                                            visible: false,
-                                            child: Container(
-                                              width: 30,
-                                              height: 30,
-                                              child: Obx(() => ImageIcon(
-                                                    size: 40,
-                                                    color: Styles.themeData(
-                                                            controller.getStorge
-                                                                .read(
-                                                                    "isDarkMode"),
-                                                            context)
-                                                        .primaryColorLight,
-                                                    AssetImage(
-                                                      'lib/Resources/drawable/playlist_01.png',
-                                                    ),
-                                                    key: ValueKey<bool>(
-                                                        controller
-                                                            .IsFavoriteS.value),
-                                                  )),
+                            padding: EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                GetBuilder<PlayViewModel>(
+                                  builder: (controller) => Container(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Container(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              if (controller.IsLiked.value ==
+                                                  false) {
+                                                controller.insertLike(
+                                                    controller
+                                                        .list1[controller
+                                                            .index.value]
+                                                        .resource!
+                                                        .rscUid
+                                                        .toString(),
+                                                    controller.User_Id,
+                                                    now.toString());
+                                                controller.IsLiked.value = true;
+                                              } else {
+                                                controller.deleteRecord(
+                                                    controller.User_Id,
+                                                    controller
+                                                        .list1[controller
+                                                            .index.value]
+                                                        .resource!
+                                                        .rscUid
+                                                        .toString());
+                                                controller.IsLiked.value =
+                                                    false;
+                                              }
+                                            },
+                                            child: AnimatedSwitcher(
+                                              duration:
+                                                  Duration(milliseconds: 3),
+                                              switchInCurve: Curves.easeIn,
+                                              switchOutCurve: Curves.easeOut,
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    30, 0, 0, 0),
+                                                child: Obx(() => ImageIcon(
+                                                      size: 30,
+                                                      color: controller
+                                                              .IsLiked.value
+                                                          ? Color.fromRGBO(
+                                                              247, 0, 180, 1)
+                                                          : Styles.themeData(
+                                                                  controller
+                                                                      .getStorge
+                                                                      .read(
+                                                                          "isDarkMode"),
+                                                                  context)
+                                                              .primaryColorLight,
+                                                      AssetImage(
+                                                        'lib/Resources/drawable/thumbs-up-regular.png',
+                                                      ),
+                                                      key: ValueKey<bool>(
+                                                          controller
+                                                              .IsLiked.value),
+                                                    )),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.67,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          if (controller.IsFavoriteS.value ==
-                                              false) {
-                                            MemoDbProvider().addItem(item);
-                                            controller.IsFavoriteS.value = true;
-                                          } else {
-                                            MemoDbProvider().deleteSong(
-                                                item.RscUid.toString());
-                                            controller.IsFavoriteS.value =
-                                                false;
-                                          }
-                                        },
-                                        child: AnimatedSwitcher(
-                                          duration: Duration(milliseconds: 3),
-                                          switchInCurve: Curves.easeIn,
-                                          switchOutCurve: Curves.easeOut,
-                                          child: Container(
-                                            width: 30,
-                                            height: 30,
-                                            child: Obx(() => ImageIcon(
-                                                  size: 40,
-                                                  color: controller
-                                                          .IsFavoriteS.value
-                                                      ? Color.fromRGBO(
-                                                          247, 0, 180, 1)
-                                                      : Styles.themeData(
-                                                              controller
-                                                                  .getStorge
-                                                                  .read(
-                                                                      "isDarkMode"),
-                                                              context)
-                                                          .primaryColorLight,
-                                                  AssetImage(
-                                                    'lib/Resources/drawable/heart_01.png',
-                                                  ),
-                                                  key: ValueKey<bool>(controller
-                                                      .IsFavoriteS.value),
-                                                )),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Container(
+                                          child: Text(
+                                            controller.likes,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Color(0xFFFFFFFF),
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 18,
+                                              height: 1.5,
+                                              fontFamily: 'Poppins',
+                                              letterSpacing: 0,
+                                              // Additional text style properties...
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                        SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.54),
+                                        Container(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              if (controller
+                                                      .IsFavoriteS.value ==
+                                                  false) {
+                                                MemoDbProvider().addItem(item);
+                                                controller.IsFavoriteS.value =
+                                                    true;
+                                              } else {
+                                                MemoDbProvider().deleteSong(
+                                                    item.RscUid.toString());
+                                                controller.IsFavoriteS.value =
+                                                    false;
+                                              }
+                                            },
+                                            child: AnimatedSwitcher(
+                                              duration:
+                                                  Duration(milliseconds: 3),
+                                              switchInCurve: Curves.easeIn,
+                                              switchOutCurve: Curves.easeOut,
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    0, 0, 10, 0),
+                                                child: Obx(() => ImageIcon(
+                                                      size: 30,
+                                                      color: controller
+                                                              .IsFavoriteS.value
+                                                          ? Color.fromRGBO(
+                                                              247, 0, 180, 1)
+                                                          : Styles.themeData(
+                                                                  controller
+                                                                      .getStorge
+                                                                      .read(
+                                                                          "isDarkMode"),
+                                                                  context)
+                                                              .primaryColorLight,
+                                                      AssetImage(
+                                                        'lib/Resources/drawable/heart_01.png',
+                                                      ),
+                                                      key: ValueKey<bool>(
+                                                          controller.IsFavoriteS
+                                                              .value),
+                                                    )),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
                           ),
                         ]),

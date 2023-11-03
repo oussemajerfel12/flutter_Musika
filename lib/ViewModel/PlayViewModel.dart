@@ -1,9 +1,10 @@
 // ignore_for_file: depend_on_referenced_packages, no_leading_underscores_for_local_identifiers, unnecessary_new, unnecessary_null_comparison
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:musika/Model/SearchResult.dart';
@@ -11,7 +12,7 @@ import 'package:musika/Model/SearchResult.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:audioplayers/audioplayers.dart';
-
+import '../Provider/SqlServerApi.dart';
 import 'package:better_player/better_player.dart';
 
 class PlayViewModel extends GetxController {
@@ -29,9 +30,14 @@ class PlayViewModel extends GetxController {
   RxBool isShuffled = false.obs;
   RxBool isRepated = false.obs;
   RxBool IsFavoriteS = false.obs;
-
+  RxBool IsLiked = false.obs;
+  RxBool Trendy = false.obs;
+  RxInt enter = 0.obs;
+  SqlServerApi db = SqlServerApi();
+  RxInt Nb_vues = 0.obs;
+  String likes = "";
   Timer? _timer;
-
+  late String User_Id;
   var currentSong = Result().obs;
 
   RxList<Result> list1 = RxList();
@@ -44,6 +50,7 @@ class PlayViewModel extends GetxController {
   RxString _url = RxString("");
   String get url => _url.value;
   RxDouble containerHeight = RxDouble(50);
+  DateTime now = DateTime.now();
 
   void playSongg(List<Result> _list1, int _index) {
     list1.clear();
@@ -51,6 +58,161 @@ class PlayViewModel extends GetxController {
 
     for (int i = 0; i < _list1.length; i++) {
       list1.add(_list1[i]);
+    }
+  }
+
+  Future<String> getNumberOfViews(String id) async {
+    final response = await http
+        .get(Uri.parse('http://197.10.242.135:3000/getNumberOfViews/$id'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      String data1 = data[0]["nombre_des_vus"].toString();
+      return data1;
+    } else {
+      throw Exception('Failed to load view count');
+    }
+  }
+
+  Future<String> getNumberOfLikes(String id) async {
+    final response = await http
+        .get(Uri.parse('http://197.10.242.135:3000/getNumberOfLikes/$id'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      String data1 = data[0]["nombre_des_likes"].toString();
+      return data1;
+    } else {
+      throw Exception('Failed to load view count');
+    }
+  }
+
+  Future<void> insertData(String titre, String ID, String date) async {
+    final Uri uri = Uri.parse(
+        'http://197.10.242.135:3000/insert-data'); // Replace with your Node.js server URL
+
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'titre': titre,
+        'ID': ID,
+        'Date': date,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Data inserted successfully.');
+    } else {
+      print('Failed to insert data. Error: ${response.statusCode}');
+    }
+  }
+
+  Future<void> insertLike(String id_titre, String ID_user, String date) async {
+    final Uri uri = Uri.parse('http://197.10.242.135:3000/insert-Like');
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'id_user': ID_user,
+        'id_Titre': id_titre,
+        'Date_like': date,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Data inserted successfully.');
+    } else {
+      print('Failed to insert data. Error: ${response.statusCode}');
+    }
+  }
+
+  Future<bool> checkIfLikeExists(String id, String idUser) async {
+    final String apiUrl =
+        'http://197.10.242.135:3000/fetch_LIKE_exist/$id/$idUser';
+
+    final response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data['exists'];
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<bool> checkIfExists(String id) async {
+    final String apiUrl = 'http://197.10.242.135:3000/fetch_if_exist/$id';
+
+    final response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data['exists'];
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> deleteRecord(String userID, String idTitre) async {
+    final Uri uri = Uri.parse('http://197.10.242.135:3000/delete-record');
+
+    try {
+      final response = await http.delete(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'userID': userID,
+          'idTitre': idTitre,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Record deleted successfully.');
+      } else {
+        print('Failed to delete record. Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
+  Future<void> insertData1(
+      String id, String artist, String coverImage, String url) async {
+    final Map<String, dynamic> data = {
+      'ID': id,
+      'Artiste': artist,
+      'CoverImage': coverImage,
+      'Lien': url,
+    };
+
+    final response = await http.post(
+      Uri.parse('http://197.10.242.135:3000/insertdata'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'ID': id,
+        'Artiste': artist,
+        'CoverImage': coverImage,
+        'Lien': url,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Request was successful
+      print('Data inserted successfully');
+    } else {
+      // Handle errors here
+      print('Error: ${response.reasonPhrase}');
     }
   }
 
@@ -63,6 +225,7 @@ class PlayViewModel extends GetxController {
   }
 
   void playNextSong() {
+    enter = 0.obs;
     if (list1.isNotEmpty) {
       if (list1[index.value].resource!.type.toString() == "Titre") {
         isRepated.value = false;
@@ -111,6 +274,7 @@ class PlayViewModel extends GetxController {
   }
 
   void playPreviousSong() {
+    enter = 0.obs;
     if (list1.isNotEmpty) {
       if (list1[index.value].resource!.type.toString() == "Titre") {
         isRepated.value = false;
@@ -161,6 +325,7 @@ class PlayViewModel extends GetxController {
   void repeat() {
     if (isRepated.value == true) {
       Stop();
+      enter = 0.obs;
       _position.value = Duration.zero;
 
       _betterPlayerController.play();
@@ -182,9 +347,11 @@ class PlayViewModel extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    User_Id = getStorge.read("name");
   }
 
   void shuffle() {
+    enter = 0.obs;
     isRepated.value = false;
     final random = Random();
     index.value = random.nextInt(list1.length);

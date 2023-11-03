@@ -59,6 +59,7 @@ class HomeView extends GetView<HomeViewModel> {
           controller.loadPageArtist(),
           controller.fRecent(),
           //controller.likethat(),
+          controller.getTrend(),
         ]),
         builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (!snapshot.hasData) {
@@ -68,9 +69,10 @@ class HomeView extends GetView<HomeViewModel> {
           List<Result>? _TitreList = snapshot.data![1];
           List<Result>? _ArtistList = snapshot.data![2];
           RxList<SongModel> _Recent = snapshot.data![3];
+          List<Result>? Trend = snapshot.data![4];
           //List<Result>? Likethat = snapshot.data![4];
           List<Result> resultItems = [];
-          if (_Titrehot!.length > 0) {
+          if (_Titrehot!.length >= 0) {
             return Obx(() => Scaffold(
                   appBar: null,
                   body: Container(
@@ -85,6 +87,187 @@ class HomeView extends GetView<HomeViewModel> {
                           Container(
                             height: MediaQuery.of(context).size.width * 0.10,
                           ),
+                          IntrinsicHeight(
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                  left: tt == TextDirection.rtl ? 0 : 14,
+                                  top: 10,
+                                  bottom: 0,
+                                  right: tt == TextDirection.rtl ? 8 : 0),
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.98,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Trend Now'.tr,
+                                      textAlign: TextAlign.left,
+                                      style: Styles.themeData(
+                                              controller.getStorge
+                                                  .read("isDarkMode"),
+                                              context)
+                                          .textTheme
+                                          .headline1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          //liste debute ici du Hot Now
+                          Flexible(
+                            child: Container(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.2489,
+                              width: MediaQuery.of(context).size.width * 0.95,
+                              child: ListView.builder(
+                                shrinkWrap: false,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: Trend?.length,
+                                itemBuilder:
+                                    (BuildContext context, int index) =>
+                                        Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color.fromRGBO(70, 17, 87, 255),
+                                        Color.fromRGBO(88, 16, 93, 255),
+                                      ], // Replace with your desired gradient colors
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Container(
+                                      width: 132,
+                                      height: 350,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              c1.isShuffled.value = false;
+                                              c1.isRepated.value = false;
+                                              if (c.Miniplayer.value == false) {
+                                                Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PlaySongView(
+                                                          index, Trend),
+                                                ));
+                                                c1.enter = 0.obs;
+                                                c1.playSongg(Trend, index);
+                                                c1.Play(Trend[index]
+                                                    .primaryDocs!
+                                                    .link
+                                                    .toString()
+                                                    .replaceAll(
+                                                        'https', 'http'));
+                                              } else {
+                                                c1.Stop();
+                                                c1.enter = 0.obs;
+                                                c1.playSongg(Trend, index);
+
+                                                c1.update();
+                                                if (Platform.isIOS == true) {
+                                                  c1.Play(Trend[index]
+                                                      .primaryDocs!
+                                                      .link
+                                                      .toString());
+                                                } else {
+                                                  c1.Play(Trend[index]
+                                                      .primaryDocs!
+                                                      .link
+                                                      .toString()
+                                                      .replaceAll(
+                                                          'https', 'http'));
+                                                }
+                                              }
+                                            },
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  width: 120,
+                                                  height: 120,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Color.fromRGBO(
+                                                                255,
+                                                                255,
+                                                                255,
+                                                                0.57)
+                                                            .withOpacity(0.20),
+                                                      ),
+                                                    ],
+                                                    image: DecorationImage(
+                                                        image: NetworkImage(
+                                                          Trend![index]
+                                                              .fieldList!
+                                                              .thumbSmall
+                                                              .toString(),
+                                                        ),
+                                                        fit: BoxFit.fill,
+                                                        alignment:
+                                                            Alignment.center),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  height: 15,
+                                                ),
+                                                Container(
+                                                  height: 25,
+                                                  child: Text(
+                                                    Trend[index]
+                                                        .resource!
+                                                        .crtr
+                                                        .toString(),
+                                                    style: Styles.themeData(
+                                                            controller.getStorge
+                                                                .read(
+                                                                    "isDarkMode"),
+                                                            context)
+                                                        .textTheme
+                                                        .headline2,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  Trend[index]
+                                                      .resource!
+                                                      .id
+                                                      .toString(),
+                                                  style: Styles.themeData(
+                                                          controller.getStorge
+                                                              .read(
+                                                                  "isDarkMode"),
+                                                          context)
+                                                      .textTheme
+                                                      .headline3,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
                           //Section Hot Now
                           IntrinsicHeight(
                             child: Container(
@@ -161,6 +344,7 @@ class HomeView extends GetView<HomeViewModel> {
                                                       PlaySongView(
                                                           index, _Titrehot),
                                                 ));
+                                                c1.enter = 0.obs;
                                                 c1.playSongg(_Titrehot, index);
                                                 c1.Play(_Titrehot[index]
                                                     .primaryDocs!
@@ -170,6 +354,7 @@ class HomeView extends GetView<HomeViewModel> {
                                                         'https', 'http'));
                                               } else {
                                                 c1.Stop();
+                                                c1.enter = 0.obs;
                                                 c1.playSongg(_Titrehot, index);
 
                                                 c1.update();
@@ -359,6 +544,7 @@ class HomeView extends GetView<HomeViewModel> {
                                                       PlaySongView(
                                                           index, _TitreList),
                                                 ));
+                                                c1.enter = 0.obs;
                                                 c1.playSongg(_TitreList, index);
                                                 c1.Play(_TitreList[index]
                                                     .primaryDocs!
@@ -368,6 +554,7 @@ class HomeView extends GetView<HomeViewModel> {
                                                         'https', 'http'));
                                               } else {
                                                 c1.Stop();
+
                                                 c1.playSongg(_TitreList, index);
 
                                                 c1.update();

@@ -97,7 +97,7 @@ class LoginViewModel extends GetxController {
     Uri link = Uri(
       scheme: 'https',
       host: 'integ03-cmam.archimed.fr',
-      path: '/PNT/Portal//musika/register.aspx',
+      path: '/MUSIKA/Portal//musika/register.aspx',
     );
 
     if (await canLaunchUrl(link)) {
@@ -168,6 +168,17 @@ class LoginViewModel extends GetxController {
       await launch(url);
     } else {
       throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> fetchData() async {
+    final response =
+        await http.get(Uri.parse('http://192.168.3.130:3000/get-data'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      // Process and use the data in your Flutter app
+    } else {
+      throw Exception('Failed to load data');
     }
   }
 
